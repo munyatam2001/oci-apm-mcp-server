@@ -106,9 +106,7 @@ def test_connection_gets_one_domain_and_allowlists_output() -> None:
 def test_connection_lists_at_most_one_domain() -> None:
     compartment_id = "ocid1.compartment.oc1..sensitivevalue"
     client = FakeClient()
-    service = FoundationService(
-        Settings(compartment_id=compartment_id), FakeFactory(client)
-    )
+    service = FoundationService(Settings(compartment_id=compartment_id), FakeFactory(client))
 
     result = service.test_connection()
 

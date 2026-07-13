@@ -114,9 +114,7 @@ class FoundationService:
 
         effective_domain = apm_domain_id or self._settings.apm_domain_id
         effective_compartment = compartment_id or self._settings.compartment_id
-        scope = self._scope(
-            compartment_id=effective_compartment, apm_domain_id=effective_domain
-        )
+        scope = self._scope(compartment_id=effective_compartment, apm_domain_id=effective_domain)
 
         if not effective_domain and not effective_compartment:
             return ToolResponse(
@@ -136,6 +134,7 @@ class FoundationService:
         client_request_id = uuid4().hex
         try:
             client = self._client_factory.apm_domain_client()
+            data: dict[str, Any]
             if effective_domain:
                 response = client.get_apm_domain(
                     apm_domain_id=effective_domain,

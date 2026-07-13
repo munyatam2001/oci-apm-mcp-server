@@ -56,8 +56,12 @@ class OciAuthProvider:
         if not region:
             raise RuntimeError("OCI region could not be determined for the selected principal")
 
-        config: dict[str, Any] = {"region": region}
+        principal_config: dict[str, Any] = {"region": region}
         tenancy_id = getattr(signer, "tenancy_id", None)
         if tenancy_id:
-            config["tenancy"] = tenancy_id
-        return AuthSession(config=config, signer=signer, auth_type=settings.auth_type)
+            principal_config["tenancy"] = tenancy_id
+        return AuthSession(
+            config=principal_config,
+            signer=signer,
+            auth_type=settings.auth_type,
+        )

@@ -16,9 +16,7 @@ class FakeAuthProvider:
         self.signer = signer
 
     def create(self) -> AuthSession:
-        return AuthSession(
-            config={"region": "ap-mumbai-1"}, signer=self.signer, auth_type="test"
-        )
+        return AuthSession(config={"region": "ap-mumbai-1"}, signer=self.signer, auth_type="test")
 
 
 class RecordingClient:
@@ -27,9 +25,7 @@ class RecordingClient:
 
 
 def test_client_factory_applies_timeouts_and_signer(monkeypatch: pytest.MonkeyPatch) -> None:
-    module = SimpleNamespace(
-        apm_control_plane=SimpleNamespace(ApmDomainClient=RecordingClient)
-    )
+    module = SimpleNamespace(apm_control_plane=SimpleNamespace(ApmDomainClient=RecordingClient))
     monkeypatch.setattr(client_factory, "import_module", lambda _name: module)
     signer = object()
     factory = OciClientFactory(
@@ -47,9 +43,7 @@ def test_client_factory_applies_timeouts_and_signer(monkeypatch: pytest.MonkeyPa
 
 
 def test_client_factory_omits_empty_signer(monkeypatch: pytest.MonkeyPatch) -> None:
-    module = SimpleNamespace(
-        apm_control_plane=SimpleNamespace(ApmDomainClient=RecordingClient)
-    )
+    module = SimpleNamespace(apm_control_plane=SimpleNamespace(ApmDomainClient=RecordingClient))
     monkeypatch.setattr(client_factory, "import_module", lambda _name: module)
 
     client = OciClientFactory(Settings(), FakeAuthProvider(None)).apm_domain_client()
