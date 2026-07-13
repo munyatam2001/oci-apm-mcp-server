@@ -24,6 +24,8 @@ Exit criteria:
 
 ## M1 — server foundation
 
+Status: implemented locally; pending GitHub CI confirmation and live test-domain validation.
+
 Deliverables:
 
 - official MCP SDK dependency and executable entry point;

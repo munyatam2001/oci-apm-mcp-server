@@ -1,12 +1,12 @@
 # MCP client setup
 
-> These examples are design placeholders. The `oci-apm-mcp-server` executable does not exist until Milestone 1.
+> The foundation executable is available. It currently exposes only context and connection-check tools.
 
 ## 1. Local STDIO
 
 STDIO will be the first supported transport.
 
-After installation, the expected Codex command will be:
+After installation, add it to Codex with:
 
 ```bash
 codex mcp add oci-apm --env OCI_APM_AUTH_TYPE=config_file --env OCI_CONFIG_PROFILE=DEFAULT -- oci-apm-mcp-server
@@ -24,7 +24,7 @@ required = false
 default_tools_approval_mode = "writes"
 ```
 
-The final implementation will document exact variable names and defaults. Credentials and private-key contents will never be placed directly in MCP configuration.
+Credentials and private-key contents must never be placed directly in MCP configuration.
 
 ## 2. OCI VM through SSH STDIO
 
@@ -70,7 +70,7 @@ MCP tool arguments do not change authentication mode or credential location.
 
 ## 5. Expected startup variables
 
-Names remain provisional until Milestone 1:
+Supported startup variables:
 
 | Variable | Purpose |
 |---|---|
@@ -80,12 +80,11 @@ Names remain provisional until Milestone 1:
 | `OCI_REGION` | Effective OCI region |
 | `OCI_APM_COMPARTMENT_ID` | Default bounded compartment |
 | `OCI_APM_DOMAIN_ID` | Default APM domain |
+| `OCI_APM_ALLOW_SCOPE_OVERRIDE` | Permit tool arguments to replace configured scope; defaults false |
 | `OCI_APM_READ_ONLY` | Must default to true |
 | `OCI_APM_LOG_LEVEL` | Application log level without payload logging |
 
 ## 6. Client verification
-
-After Milestone 1:
 
 1. Start the MCP server.
 2. Confirm the client lists `test_connection` and `get_current_context` only.
