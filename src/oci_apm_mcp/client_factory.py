@@ -17,6 +17,18 @@ class ApmDomainClientFactory(Protocol):
         ...
 
 
+class TraceClientFactory(ApmDomainClientFactory, Protocol):
+    """Factory protocol consumed by Milestone 2 read services."""
+
+    def query_client(self) -> Any:
+        """Return a client supporting trace queries and Quick Picks."""
+        ...
+
+    def trace_client(self) -> Any:
+        """Return a client supporting trace, span, and snapshot reads."""
+        ...
+
+
 class OciClientFactory:
     """Create OCI clients only when a tool actually requires an OCI call."""
 
@@ -24,8 +36,8 @@ class OciClientFactory:
         self._settings = settings
         self._auth_provider = auth_provider or OciAuthProvider(settings)
 
-    def apm_domain_client(self) -> Any:
-        oci = import_module("oci")
+    def _client_kwargs(self) -> dict[str, Any]:
+        """Build fresh SDK client arguments without retaining credentials."""
         session = self._auth_provider.create()
         kwargs: dict[str, Any] = {
             "config": session.config,
@@ -36,4 +48,16 @@ class OciClientFactory:
         }
         if session.signer is not None:
             kwargs["signer"] = session.signer
-        return oci.apm_control_plane.ApmDomainClient(**kwargs)
+        return kwargs
+
+    def apm_domain_client(self) -> Any:
+        oci = import_module("oci")
+        return oci.apm_control_plane.ApmDomainClient(**self._client_kwargs())
+
+    def query_client(self) -> Any:
+        oci = import_module("oci")
+        return oci.apm_traces.QueryClient(**self._client_kwargs())
+
+    def trace_client(self) -> Any:
+        oci = import_module("oci")
+        return oci.apm_traces.TraceClient(**self._client_kwargs())

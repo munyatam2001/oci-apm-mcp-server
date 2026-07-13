@@ -1,8 +1,8 @@
 # OCI APM MCP Server
 
-A proposed Model Context Protocol (MCP) server for safe, structured access to Oracle Cloud Infrastructure Application Performance Monitoring (OCI APM).
+A Model Context Protocol (MCP) server for safe, structured access to Oracle Cloud Infrastructure Application Performance Monitoring (OCI APM).
 
-> Status: Milestone 1 foundation. The executable MCP server exposes only two read-only tools: `get_current_context` and `test_connection`. Trace queries and OCI mutations are not implemented.
+> Status: Milestone 2 trace read path. Ten read-only tools cover context, APM-domain discovery, bounded trace queries, trace/span drill-down, and summarized snapshots. OCI mutations are not implemented.
 
 ## Product goal
 
@@ -58,8 +58,16 @@ The server uses STDIO, so stdout is reserved for MCP protocol messages. Applicat
 |---|---|---|
 | `get_current_context` | None | Show masked scope, auth mode, timeouts, version, and read-only state |
 | `test_connection` | One | Get one configured APM domain or list at most one domain in a compartment |
+| `list_apm_domains` | One | List up to 200 allowlisted APM-domain summaries |
+| `get_apm_domain` | One | Get one domain without data keys, endpoints, or tags |
+| `list_apm_quick_picks` | One | List Oracle-provided Trace Explorer queries |
+| `find_traces` | One | Run a deterministic trace query over at most 24 hours and 200 rows |
+| `run_trace_query` | One | Run a validated expert query when explicitly enabled |
+| `get_trace` | One | Get one normalized trace with at most 500 returned spans |
+| `get_span` | One | Get one normalized span with logs excluded |
+| `get_trace_snapshot` | One | Get summarized snapshot metadata without raw stack/thread values |
 
-Both tools are marked read-only, idempotent, and non-destructive in MCP metadata. `test_connection` allowlists returned domain fields and never requests APM data keys.
+Every tool is marked read-only, idempotent, and non-destructive in MCP metadata. Expert queries default to disabled (`OCI_APM_ENABLE_EXPERT_QUERY=false`). SQL text, stack traces, logs, request/response bodies, headers, cookies, URLs, user/session identifiers, and secrets are excluded or redacted.
 
 ## Verify offline
 
@@ -100,7 +108,7 @@ The default test suite uses fakes and requires no OCI credentials or network con
 │   ├── REFERENCE_REVIEW.md
 │   ├── SECURITY.md
 │   └── TOOL_CATALOG.md
-├── src/oci_apm_mcp/       # read-only MCP foundation
+├── src/oci_apm_mcp/       # read-only domain and trace services
 ├── tests/                 # offline unit and contract tests
 ├── AGENTS.md
 ├── CHANGELOG.md
@@ -111,8 +119,8 @@ The default test suite uses fakes and requires no OCI credentials or network con
 ## Planned delivery sequence
 
 - **M0 — design baseline:** documents, decisions, security model, and GitHub workflow.
-- **M1 — server foundation:** configuration, authentication, client factory, health check, error envelope, and offline tests. Implemented locally.
-- **M2 — trace read path:** APM-domain discovery, bounded trace queries, trace details, and span details.
+- **M1 — server foundation:** configuration, authentication, client factory, health check, error envelope, and offline tests. Complete.
+- **M2 — trace read path:** APM-domain discovery, bounded trace queries, trace/span details, and summarized snapshots. Implemented; live test-domain validation remains opt-in.
 - **M3 — investigations:** slow transactions, error transactions, time-window comparison, and next-step suggestions.
 - **M4 — synthetic read path:** monitor discovery, monitor details, results, and health summary.
 - **M5 — production hardening:** audit events, redaction validation, packaging, deployment, and live OCI acceptance tests.

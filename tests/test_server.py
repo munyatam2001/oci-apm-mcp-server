@@ -29,13 +29,26 @@ def test_server_has_global_read_only_instructions() -> None:
     assert "cannot create" in server.instructions
 
 
-def test_server_registers_exactly_two_tools_with_read_only_annotations() -> None:
+def test_server_registers_exactly_milestone_two_tools_with_read_only_annotations() -> None:
     server = create_mcp_server(Settings(), StubService())  # type: ignore[arg-type]
 
     tools = server._tool_manager.list_tools()  # noqa: SLF001 - contract test for SDK registration
-    assert {tool.name for tool in tools} == {"get_current_context", "test_connection"}
+    assert {tool.name for tool in tools} == {
+        "get_current_context",
+        "test_connection",
+        "list_apm_domains",
+        "get_apm_domain",
+        "list_apm_quick_picks",
+        "find_traces",
+        "run_trace_query",
+        "get_trace",
+        "get_span",
+        "get_trace_snapshot",
+    }
     for tool in tools:
         assert tool.annotations is not None
         assert tool.annotations.readOnlyHint is True
         assert tool.annotations.idempotentHint is True
         assert tool.annotations.destructiveHint is False
+        assert tool.description
+        assert tool.parameters["type"] == "object"

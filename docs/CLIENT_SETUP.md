@@ -1,6 +1,6 @@
 # MCP client setup
 
-> The foundation executable is available. It currently exposes only context and connection-check tools.
+> The Milestone 2 executable exposes ten read-only context, domain, query, trace, span, and summarized-snapshot tools.
 
 ## 1. Local STDIO
 
@@ -17,7 +17,7 @@ Equivalent project-scoped Codex configuration:
 ```toml
 [mcp_servers.oci_apm]
 command = "/absolute/path/to/venv/bin/oci-apm-mcp-server"
-env_vars = ["OCI_APM_AUTH_TYPE", "OCI_CONFIG_FILE", "OCI_CONFIG_PROFILE", "OCI_REGION", "OCI_APM_COMPARTMENT_ID", "OCI_APM_DOMAIN_ID"]
+env_vars = ["OCI_APM_AUTH_TYPE", "OCI_CONFIG_FILE", "OCI_CONFIG_PROFILE", "OCI_REGION", "OCI_APM_COMPARTMENT_ID", "OCI_APM_DOMAIN_ID", "OCI_APM_ENABLE_EXPERT_QUERY"]
 startup_timeout_sec = 15
 tool_timeout_sec = 90
 required = false
@@ -81,13 +81,15 @@ Supported startup variables:
 | `OCI_APM_COMPARTMENT_ID` | Default bounded compartment |
 | `OCI_APM_DOMAIN_ID` | Default APM domain |
 | `OCI_APM_ALLOW_SCOPE_OVERRIDE` | Permit tool arguments to replace configured scope; defaults false |
+| `OCI_APM_ENABLE_EXPERT_QUERY` | Enable validated `run_trace_query`; defaults false |
 | `OCI_APM_READ_ONLY` | Must default to true |
 | `OCI_APM_LOG_LEVEL` | Application log level without payload logging |
 
 ## 6. Client verification
 
 1. Start the MCP server.
-2. Confirm the client lists `test_connection` and `get_current_context` only.
+2. Confirm the client lists the ten tools documented in `TOOL_CATALOG.md` through M2 only.
 3. Call `get_current_context` and verify masked scope and read-only status.
 4. Call `test_connection` against a test compartment/domain.
-5. Confirm no credentials or raw OCI configuration appear in the result or logs.
+5. Run `find_traces` over a narrow test window, then retrieve one synthetic test trace/span.
+6. Confirm no credentials, raw OCI configuration, logs, SQL, stack frames, or restricted attributes appear in results or logs.

@@ -44,7 +44,7 @@ All trace content is confidential by default. The server must minimize, filter, 
 
 ## 5. Query guardrails
 
-Proposed defaults, subject to validation during Milestone 2:
+Enforced Milestone 2 defaults:
 
 | Query class | Default window | Maximum window | Default rows | Maximum rows |
 |---|---:|---:|---:|---:|
@@ -55,15 +55,15 @@ Proposed defaults, subject to validation during Milestone 2:
 
 Broadening past a maximum must produce a structured validation response; the server must not silently clamp a user request without warning.
 
-The raw query tool must reject excessive query length, missing time bounds, unsupported query categories, and any syntax classified as mutating by future API evolution.
+The expert query tool is disabled by default. When enabled, it rejects excessive query length, missing time bounds, unsupported sources, explicit `BETWEEN` clauses, sensitive fields, row-limit mismatches, and mutating syntax.
 
 ## 6. Redaction policy
 
-The implementation will combine:
+The implementation combines:
 
 1. a safe attribute allowlist for summary tools;
-2. configurable deny patterns for expert detail tools;
-3. value-level patterns for tokens, authorization headers, cookies, passwords, private keys, email addresses, and other organization-approved sensitive data;
+2. conservative deny patterns for expert query and detail tools;
+3. field-level redaction for tokens, authorization headers, cookies, passwords, and secrets;
 4. maximum string lengths and maximum attributes per span;
 5. clear `redacted_fields` and `truncated_fields` metadata.
 
@@ -74,7 +74,7 @@ Default-denied names should include, case-insensitively:
 - `private_key`, `client_secret`, `session`;
 - synthetic script parameters marked secret.
 
-SQL text, stack traces, logs, request bodies, response bodies, and custom attributes require explicit tool support and separate limits.
+SQL text, stack traces, logs, request bodies, response bodies, headers, URLs, user/session identifiers, and similar sensitive fields are excluded. Custom span attributes require explicit per-call opt-in, are capped at 50, and remain subject to redaction.
 
 ## 7. Authentication
 

@@ -17,8 +17,15 @@ All notable changes to this project will be documented here.
 - MCP read-only/idempotent/non-destructive annotations and policy drift checks.
 - Safe OCI error normalization and allowlisted APM-domain output.
 - Offline unit and registration tests plus Python 3.11/3.12 CI.
+- Milestone 2 APM-domain list/get and Trace Explorer Quick Pick tools.
+- Deterministic `find_traces` query construction with typed filters and escaping.
+- Expert `run_trace_query`, disabled by default and constrained by syntax, field, time, and row policies.
+- Normalized `get_trace` and `get_span` tools with bounded, redacted optional attributes.
+- Summarized `get_trace_snapshot` output without raw stack frames or thread details.
+- Pagination, normalized UTC windows, no-data responses, and Oracle request IDs.
+- Eighty-six offline tests with more than 95% package coverage.
 
 ### Not yet implemented
 
-- Trace, span, and synthetic-monitor operations.
+- Synthetic-monitor operations and deterministic multi-call investigations.
 - Any OCI mutation.

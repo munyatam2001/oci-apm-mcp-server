@@ -12,6 +12,7 @@ def test_defaults_are_read_only() -> None:
 
     assert settings.auth_type == "config_file"
     assert settings.read_only is True
+    assert settings.enable_expert_query is False
     assert settings.config_profile == "DEFAULT"
     assert settings.connect_timeout_seconds == 10.0
     assert settings.read_timeout_seconds == 60.0
@@ -28,6 +29,7 @@ def test_environment_is_validated_and_normalized(tmp_path: Path) -> None:
             "OCI_APM_COMPARTMENT_ID": "ocid1.compartment.example",
             "OCI_APM_DOMAIN_ID": "ocid1.apmdomain.example",
             "OCI_APM_ALLOW_SCOPE_OVERRIDE": "true",
+            "OCI_APM_ENABLE_EXPERT_QUERY": "true",
             "OCI_APM_READ_ONLY": "yes",
             "OCI_APM_LOG_LEVEL": "warning",
             "OCI_APM_CONNECT_TIMEOUT_SECONDS": "3.5",
@@ -41,6 +43,7 @@ def test_environment_is_validated_and_normalized(tmp_path: Path) -> None:
     assert settings.region == "ap-mumbai-1"
     assert settings.read_only is True
     assert settings.allow_scope_override is True
+    assert settings.enable_expert_query is True
     assert settings.log_level == "WARNING"
     assert settings.connect_timeout_seconds == 3.5
     assert settings.read_timeout_seconds == 45.0
@@ -52,6 +55,7 @@ def test_environment_is_validated_and_normalized(tmp_path: Path) -> None:
         ("OCI_APM_AUTH_TYPE", "magic"),
         ("OCI_APM_READ_ONLY", "sometimes"),
         ("OCI_APM_ALLOW_SCOPE_OVERRIDE", "sometimes"),
+        ("OCI_APM_ENABLE_EXPERT_QUERY", "sometimes"),
         ("OCI_APM_LOG_LEVEL", "verbose"),
         ("OCI_APM_CONNECT_TIMEOUT_SECONDS", "zero"),
         ("OCI_APM_READ_TIMEOUT_SECONDS", "0"),
