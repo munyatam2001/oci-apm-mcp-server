@@ -38,6 +38,7 @@ All trace content is confidential by default. The server must minimize, filter, 
 - Stdout is reserved for the MCP protocol under STDIO.
 - OCI SDK calls use explicit timeouts and bounded retries.
 - Tool results use row, span, attribute, and payload-size limits.
+- A configured compartment or APM domain is locked against tool-argument overrides by default.
 - Result metadata states when truncation or redaction occurred.
 - Errors retain Oracle request IDs but remove credentials and sensitive payload content.
 

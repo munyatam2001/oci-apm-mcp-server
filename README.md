@@ -2,7 +2,7 @@
 
 A proposed Model Context Protocol (MCP) server for safe, structured access to Oracle Cloud Infrastructure Application Performance Monitoring (OCI APM).
 
-> Status: documentation-first design. This repository does not yet contain an executable MCP server and makes no OCI API calls.
+> Status: Milestone 1 foundation. The executable MCP server exposes only two read-only tools: `get_current_context` and `test_connection`. Trace queries and OCI mutations are not implemented.
 
 ## Product goal
 
@@ -28,6 +28,51 @@ The initial release will be read-only and will prioritize:
 
 Mutating operations, including creating or changing synthetic monitors, are deferred until the read-only server is stable and security-reviewed.
 
+## Install and run
+
+Python 3.11 or newer is required.
+
+```bash
+python3 -m venv .venv
+source .venv/bin/activate
+python -m pip install -e ".[dev]"
+cp .env.example .env
+```
+
+Export the values needed for your deployment; the server does not automatically load `.env` files.
+
+```bash
+export OCI_APM_AUTH_TYPE=config_file
+export OCI_CONFIG_PROFILE=DEFAULT
+export OCI_REGION=ap-mumbai-1
+export OCI_APM_DOMAIN_ID='your-test-domain-ocid'
+export OCI_APM_READ_ONLY=true
+oci-apm-mcp-server
+```
+
+The server uses STDIO, so stdout is reserved for MCP protocol messages. Application logs go to stderr.
+
+## Current tools
+
+| Tool | OCI call | Purpose |
+|---|---|---|
+| `get_current_context` | None | Show masked scope, auth mode, timeouts, version, and read-only state |
+| `test_connection` | One | Get one configured APM domain or list at most one domain in a compartment |
+
+Both tools are marked read-only, idempotent, and non-destructive in MCP metadata. `test_connection` allowlists returned domain fields and never requests APM data keys.
+
+## Verify offline
+
+```bash
+python -m ruff check .
+python -m ruff format --check .
+python -m mypy src tests
+python -m pytest --cov=oci_apm_mcp --cov-report=term-missing --cov-fail-under=90
+python -m build
+```
+
+The default test suite uses fakes and requires no OCI credentials or network connection.
+
 ## Design principles
 
 - Use the official Python `mcp` SDK and OCI Python SDK.
@@ -45,7 +90,7 @@ Mutating operations, including creating or changing synthetic monitors, are defe
 .
 ├── .github/
 │   ├── pull_request_template.md
-│   └── workflows/docs.yml
+│   └── workflows/tests.yml
 ├── docs/
 │   ├── ARCHITECTURE.md
 │   ├── CLIENT_SETUP.md
@@ -55,8 +100,8 @@ Mutating operations, including creating or changing synthetic monitors, are defe
 │   ├── REFERENCE_REVIEW.md
 │   ├── SECURITY.md
 │   └── TOOL_CATALOG.md
-├── src/oci_apm_mcp/       # implementation begins in Milestone 1
-├── tests/                 # offline tests begin in Milestone 1
+├── src/oci_apm_mcp/       # read-only MCP foundation
+├── tests/                 # offline unit and contract tests
 ├── AGENTS.md
 ├── CHANGELOG.md
 ├── CONTRIBUTING.md
@@ -66,7 +111,7 @@ Mutating operations, including creating or changing synthetic monitors, are defe
 ## Planned delivery sequence
 
 - **M0 — design baseline:** documents, decisions, security model, and GitHub workflow.
-- **M1 — server foundation:** configuration, authentication, client factory, health check, error envelope, and offline tests.
+- **M1 — server foundation:** configuration, authentication, client factory, health check, error envelope, and offline tests. Implemented locally.
 - **M2 — trace read path:** APM-domain discovery, bounded trace queries, trace details, and span details.
 - **M3 — investigations:** slow transactions, error transactions, time-window comparison, and next-step suggestions.
 - **M4 — synthetic read path:** monitor discovery, monitor details, results, and health summary.
