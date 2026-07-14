@@ -57,7 +57,7 @@ Exit criteria:
 
 ## M2 — trace read path
 
-Status: implemented on `feat/trace-read-path`; pending pull-request review and opt-in live test-domain validation.
+Status: complete and merged; opt-in live test-domain validation remains pending.
 
 Deliverables:
 
@@ -160,9 +160,7 @@ Required first:
 
 ## Open decisions requiring stakeholder input
 
-- GitHub owner/organization and repository visibility.
-- Project license.
-- Primary deployment: local, shared OCI VM, or both.
+- Timing of the planned change from private to public repository visibility.
 - Whether compartment selection is fixed at startup or discoverable at runtime.
 - Approved sensitive-attribute policy and organization-specific redaction patterns.
 - Whether expert raw query access is enabled by default.

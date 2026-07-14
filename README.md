@@ -4,6 +4,10 @@ A Model Context Protocol (MCP) server for safe, structured access to Oracle Clou
 
 > Status: Milestone 2 trace read path. Ten read-only tools cover context, APM-domain discovery, bounded trace queries, trace/span drill-down, and summarized snapshots. OCI mutations are not implemented.
 
+> This is an independent open-source project. It is not affiliated with, endorsed by, or
+> supported by Oracle Corporation. Oracle, OCI, and related marks are trademarks of Oracle
+> and/or its affiliates.
+
 ## Product goal
 
 Enable MCP clients such as Codex to investigate application latency, errors, traces, spans, and synthetic monitor health without giving an agent unnecessary control over APM resources.
@@ -128,6 +132,9 @@ The default test suite uses fakes and requires no OCI credentials or network con
 
 See [the development plan](docs/DEVELOPMENT_PLAN.md) for acceptance criteria.
 
+For an OCI Compute deployment using instance principals and an SSH-connected local Codex
+client, see [the Oracle Linux VM deployment guide](docs/VM_DEPLOYMENT.md).
+
 ## Official references
 
 - [Oracle APM documentation](https://docs.oracle.com/en-us/iaas/application-performance-monitoring/)
@@ -139,4 +146,4 @@ See [the development plan](docs/DEVELOPMENT_PLAN.md) for acceptance criteria.
 
 ## Licensing
 
-No license has been selected yet. Choose and add a license before publishing the repository or accepting external contributions.
+Licensed under the [Apache License 2.0](LICENSE).

@@ -1,6 +1,8 @@
 # Contributing
 
-The project is currently in its design phase. Changes should remain small, reviewable, and tied to a documented milestone.
+The project is under active development. Changes should remain small, reviewable, and tied to
+a documented milestone. By submitting a contribution, you agree that it is licensed under the
+Apache License 2.0.
 
 ## Before opening a pull request
 
@@ -29,3 +31,6 @@ Pull requests must describe:
 - rollback considerations.
 
 OCI mutations require a dedicated design review and must not be bundled into a read-only feature pull request.
+
+Report suspected vulnerabilities through the private process described in `SECURITY.md`, not
+through a public issue.
