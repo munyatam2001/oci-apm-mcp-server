@@ -24,6 +24,9 @@ All notable changes to this project will be documented here.
 - Summarized `get_trace_snapshot` output without raw stack frames or thread details.
 - Pagination, normalized UTC windows, no-data responses, and Oracle request IDs.
 - Eighty-six offline tests with more than 95% package coverage.
+- Apache License 2.0 and public contribution/security-reporting guidance.
+- Oracle Linux VM deployment guidance for instance-principal authentication and SSH STDIO.
+- Dependabot configuration for Python packages and GitHub Actions.
 
 ### Not yet implemented
 
