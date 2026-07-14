@@ -5,6 +5,7 @@ from typing import Any
 
 from oci_apm_mcp.config import Settings, mask_identifier
 from oci_apm_mcp.foundation import FoundationService
+from oci_apm_mcp.guardrails import TOOL_POLICIES
 
 
 class FakeResponse:
@@ -173,7 +174,4 @@ def test_non_read_only_configuration_warns_but_adds_no_mutations() -> None:
     ).get_current_context()
 
     assert result["warnings"]
-    assert result["data"]["registered_capabilities"] == [
-        "get_current_context",
-        "test_connection",
-    ]
+    assert result["data"]["registered_capabilities"] == sorted(TOOL_POLICIES)

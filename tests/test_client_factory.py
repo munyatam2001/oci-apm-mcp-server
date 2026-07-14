@@ -49,3 +49,19 @@ def test_client_factory_omits_empty_signer(monkeypatch: pytest.MonkeyPatch) -> N
     client = OciClientFactory(Settings(), FakeAuthProvider(None)).apm_domain_client()
 
     assert "signer" not in client.kwargs
+
+
+def test_client_factory_constructs_narrow_trace_clients(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    module = SimpleNamespace(
+        apm_traces=SimpleNamespace(QueryClient=RecordingClient, TraceClient=RecordingClient)
+    )
+    monkeypatch.setattr(client_factory, "import_module", lambda _name: module)
+    factory = OciClientFactory(Settings(), FakeAuthProvider(None))
+
+    query_client = factory.query_client()
+    trace_client = factory.trace_client()
+
+    assert query_client.kwargs["timeout"] == (10.0, 60.0)
+    assert trace_client.kwargs["timeout"] == (10.0, 60.0)

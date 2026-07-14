@@ -67,6 +67,4 @@ def normalize_error(error: BaseException) -> NormalizedError:
             "Could not reach OCI within the configured timeout.",
             request_id,
         )
-    return NormalizedError(
-        "error", "unexpected_error", "The APM connectivity check failed.", request_id
-    )
+    return NormalizedError("error", "unexpected_error", "The OCI APM request failed.", request_id)

@@ -59,6 +59,7 @@ class Settings:
     compartment_id: str | None = None
     apm_domain_id: str | None = None
     allow_scope_override: bool = False
+    enable_expert_query: bool = False
     read_only: bool = True
     log_level: str = "INFO"
     connect_timeout_seconds: float = 10.0
@@ -95,6 +96,11 @@ class Settings:
                 default=False,
                 name="OCI_APM_ALLOW_SCOPE_OVERRIDE",
             ),
+            enable_expert_query=_parse_bool(
+                env.get("OCI_APM_ENABLE_EXPERT_QUERY"),
+                default=False,
+                name="OCI_APM_ENABLE_EXPERT_QUERY",
+            ),
             read_only=_parse_bool(
                 env.get("OCI_APM_READ_ONLY"), default=True, name="OCI_APM_READ_ONLY"
             ),
@@ -119,9 +125,19 @@ class Settings:
             "compartment_id": mask_identifier(self.compartment_id),
             "apm_domain_id": mask_identifier(self.apm_domain_id),
             "allow_scope_override": self.allow_scope_override,
+            "enable_expert_query": self.enable_expert_query,
             "read_only": self.read_only,
             "timeouts": {
                 "connect_seconds": self.connect_timeout_seconds,
                 "read_seconds": self.read_timeout_seconds,
+            },
+            "limits": {
+                "default_query_window_hours": 1,
+                "maximum_raw_query_window_hours": 24,
+                "maximum_aggregate_query_window_days": 7,
+                "default_rows": 50,
+                "maximum_raw_rows": 200,
+                "maximum_aggregate_rows": 500,
+                "maximum_trace_spans": 500,
             },
         }

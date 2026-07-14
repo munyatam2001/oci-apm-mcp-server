@@ -2,7 +2,7 @@
 
 ## 1. Catalogue rules
 
-This document is the proposed public contract. Tools are not implemented yet.
+This document is the public contract. M1 and M2 tools are implemented; later milestone sections remain planned.
 
 Each tool will return the common response envelope defined in `ARCHITECTURE.md`. Tool-specific content is placed in `data`. Every result includes explicit scope, timing, warnings, pagination, and partial-result metadata when applicable.
 
@@ -34,6 +34,8 @@ Returns region, compartment OCID in masked form, APM domain OCID in masked form,
 Classification: read-only, idempotent, no OCI call required.
 
 ### M2 trace read path
+
+Status: implemented in version 0.2.0. Live calls remain opt-in and must use a non-production test domain first.
 
 #### `list_apm_domains`
 
@@ -100,6 +102,8 @@ Inputs:
 - `limit` and `page`.
 
 The server validates query length, window, limit, and supported query category. It returns selected/aggregated fields rather than arbitrary internal OCI objects.
+
+This tool is registered but disabled by default. Set `OCI_APM_ENABLE_EXPERT_QUERY=true` only for an approved deployment. Sensitive fields and `BETWEEN` clauses remain blocked.
 
 Default limit: 50. Maximum: 500 for aggregated results and 200 for raw results. Maximum window: 7 days for aggregate queries, 24 hours for raw queries.
 

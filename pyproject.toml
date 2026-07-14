@@ -4,8 +4,8 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "oci-apm-mcp-server"
-version = "0.1.0"
-description = "Read-only MCP server foundation for OCI Application Performance Monitoring"
+version = "0.2.0"
+description = "Read-only MCP server for OCI Application Performance Monitoring"
 readme = "README.md"
 requires-python = ">=3.11"
 dependencies = [

@@ -24,7 +24,7 @@ Exit criteria:
 
 ## M1 — server foundation
 
-Status: implemented locally; pending GitHub CI confirmation and live test-domain validation.
+Status: complete and merged; live test-domain validation remains opt-in.
 
 Deliverables:
 
@@ -56,6 +56,8 @@ Exit criteria:
 - read-only is true by default.
 
 ## M2 — trace read path
+
+Status: implemented on `feat/trace-read-path`; pending pull-request review and opt-in live test-domain validation.
 
 Deliverables:
 

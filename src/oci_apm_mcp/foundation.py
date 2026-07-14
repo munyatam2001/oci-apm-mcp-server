@@ -9,6 +9,7 @@ from uuid import uuid4
 from .client_factory import ApmDomainClientFactory, OciClientFactory
 from .config import Settings, mask_identifier
 from .errors import normalize_error
+from .guardrails import TOOL_POLICIES
 from .models import Scope, ToolResponse
 
 
@@ -53,9 +54,9 @@ class FoundationService:
             status="success",
             scope=self._scope(),
             data={
-                "server_version": "0.1.0",
+                "server_version": "0.2.0",
                 "configuration": context,
-                "registered_capabilities": ["get_current_context", "test_connection"],
+                "registered_capabilities": sorted(TOOL_POLICIES),
             },
             warnings=(
                 []
