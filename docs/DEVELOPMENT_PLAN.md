@@ -160,7 +160,6 @@ Required first:
 
 ## Open decisions requiring stakeholder input
 
-- Timing of the planned change from private to public repository visibility.
 - Whether compartment selection is fixed at startup or discoverable at runtime.
 - Approved sensitive-attribute policy and organization-specific redaction patterns.
 - Whether expert raw query access is enabled by default.
