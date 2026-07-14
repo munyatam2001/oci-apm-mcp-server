@@ -27,6 +27,8 @@ All notable changes to this project will be documented here.
 - Apache License 2.0 and public contribution/security-reporting guidance.
 - Oracle Linux VM deployment guidance for instance-principal authentication and SSH STDIO.
 - Dependabot configuration for Python packages and GitHub Actions.
+- Reviewed public repository release with protected `main`, secret scanning, push protection,
+  dependency security updates, and private vulnerability reporting.
 
 ### Not yet implemented
 

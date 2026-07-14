@@ -3,7 +3,7 @@
 ## Repository recommendation
 
 - Name: `oci-apm-mcp-server`
-- Visibility: private until the public-release checklist is complete.
+- Visibility: public.
 - Default branch: `main`.
 - No direct pushes to `main` after the design baseline.
 - Require pull requests and passing CI before merge.
@@ -63,12 +63,12 @@ Recommended initial history:
 ## Repository creation checklist
 
 - [x] Confirm GitHub owner: `munyatam2001`.
-- [x] Confirm private initial visibility and planned public visibility.
+- [x] Confirm private initial visibility and complete the reviewed public release.
 - [x] Choose Apache License 2.0.
 - [x] Confirm repository name.
 - [x] Create the remote and review the complete Git history.
 - [x] Add the remote and merge the design baseline through M2.
-- [ ] Configure branch protection and security features.
+- [x] Configure branch protection and security features.
 - [ ] Record the first tagged design baseline after approval.
 
 ## Public-release checklist
@@ -80,12 +80,12 @@ Recommended initial history:
 - [x] Add automated dependency update configuration.
 - [x] Document public cloning without placing GitHub or OCI credentials in deployment files.
 - [ ] Confirm organizational or employer approval to publish, when applicable.
-- [ ] Review GitHub Actions logs before the visibility change; public repositories expose the
+- [x] Review GitHub Actions logs before the visibility change; public repositories expose the
   existing workflow history.
-- [ ] Change repository visibility only after this checklist is approved.
-- [ ] Enable private vulnerability reporting, secret scanning, push protection, Dependabot
+- [x] Change repository visibility only after this checklist is approved.
+- [x] Enable private vulnerability reporting, secret scanning, push protection, Dependabot
   alerts, and branch protection immediately after the repository becomes public.
-- [ ] Verify anonymous HTTPS clone from a clean environment.
+- [x] Verify anonymous HTTPS clone from a clean environment.
 
 ## Sensitive data rules
 
