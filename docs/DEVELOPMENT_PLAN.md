@@ -91,7 +91,7 @@ passed; operators must continue to verify the deployed dynamic-group policy in O
 
 ## M3 — deterministic investigations
 
-Status: implemented in version 0.3.0; opt-in live validation remains pending.
+Status: complete and live-validated against an approved non-production domain.
 
 Deliverables:
 
@@ -115,6 +115,8 @@ Implementation budgets:
 - errors: at most two OCI calls, a 50-trace search sample, up to 10 error-bearing summaries,
   and up to 50 spans from one representative trace;
 - comparison: exactly two OCI calls and up to 50 newest trace summaries per window.
+
+The anonymized validation results are recorded in `M3_LIVE_ACCEPTANCE.md`.
 
 ## M4 — synthetic read path
 

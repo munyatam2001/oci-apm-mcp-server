@@ -130,7 +130,7 @@ The default test suite uses fakes and requires no OCI credentials or network con
 - **M0 — design baseline:** documents, decisions, security model, and GitHub workflow.
 - **M1 — server foundation:** configuration, authentication, client factory, health check, error envelope, and offline tests. Complete.
 - **M2 — trace read path:** APM-domain discovery, bounded trace queries, trace/span details, and summarized snapshots. Complete and live-validated in a non-production domain.
-- **M3 — investigations:** slow transactions, error transactions, time-window comparison, and next-step suggestions. Implemented; live validation remains opt-in.
+- **M3 — investigations:** slow transactions, error transactions, time-window comparison, and next-step suggestions. Complete and live-validated in a non-production domain.
 - **M4 — synthetic read path:** monitor discovery, monitor details, results, and health summary.
 - **M5 — production hardening:** audit events, redaction validation, packaging, deployment, and live OCI acceptance tests.
 - **M6 — optional writes:** separately reviewed synthetic-monitor and script mutations.

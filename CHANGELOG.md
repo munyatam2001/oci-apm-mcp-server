@@ -34,6 +34,8 @@ All notable changes to this project will be documented here.
   budget, representative trace evidence, and partial-result reporting.
 - Deterministic `compare_trace_windows` workflow with two bounded newest-trace samples,
   explicit sample limitations, low-volume warnings, and zero-denominator handling.
+- Anonymized M3 live-acceptance evidence for bounded latency, error, and window-comparison
+  workflows over the SSH and instance-principal deployment path.
 
 ### Changed
 
