@@ -133,6 +133,9 @@ Inputs: `apm_domain_id`, `trace_id`, `span_id`, and optional `include_attributes
 
 Logs, request/response bodies, SQL text, and complete stack traces are excluded from the first implementation.
 
+Every normalized span reports `logs_returned=false`. `logs_omitted=true` means source log
+entries existed and were removed; `logs_omitted=false` means no source log entries were present.
+
 Classification: read-only, idempotent, sensitive-data capable.
 
 #### `get_trace_snapshot`

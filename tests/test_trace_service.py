@@ -280,6 +280,7 @@ def test_get_trace_caps_spans_redacts_attributes_and_omits_logs() -> None:
     assert trace["omitted_span_count"] == 1
     assert trace["spans"][0]["attributes"]["safe.attribute"] == "visible"
     assert trace["spans"][0]["attributes"]["Authorization"] == "[REDACTED]"
+    assert trace["spans"][0]["logs_returned"] is False
     assert trace["spans"][0]["logs_omitted"] is True
     assert "must not leak" not in str(result)
     _, kwargs = factory.trace.calls[0]
@@ -297,6 +298,8 @@ def test_get_span_uses_optional_time_bounds_and_excludes_attributes_by_default()
 
     assert result["status"] == "success"
     assert "attributes" not in result["data"]["span"]
+    assert result["data"]["span"]["logs_returned"] is False
+    assert result["data"]["span"]["logs_omitted"] is True
     _, kwargs = factory.trace.calls[0]
     assert kwargs["trace_key"] == "trace-1"
     assert kwargs["span_key"] == "span-1"
@@ -304,6 +307,25 @@ def test_get_span_uses_optional_time_bounds_and_excludes_attributes_by_default()
     assert kwargs["time_span_started_less_than"] - kwargs[
         "time_span_started_greater_than_or_equal_to"
     ] == timedelta(hours=1)
+
+
+def test_get_span_reports_no_logs_returned_when_source_has_no_logs() -> None:
+    factory = FakeFactory()
+    original_get_span = factory.trace.get_span
+
+    def get_span_without_logs(**kwargs: Any) -> FakeResponse:
+        response = original_get_span(**kwargs)
+        response.data.logs = []
+        return response
+
+    factory.trace.get_span = get_span_without_logs  # type: ignore[method-assign]
+
+    result = TraceService(Settings(apm_domain_id=DOMAIN_ID), factory).get_span(
+        trace_id="trace-1", span_id="span-1"
+    )
+
+    assert result["data"]["span"]["logs_returned"] is False
+    assert result["data"]["span"]["logs_omitted"] is False
 
 
 def test_snapshot_is_forced_summarized_and_raw_details_never_return() -> None:

@@ -57,7 +57,7 @@ Exit criteria:
 
 ## M2 — trace read path
 
-Status: complete and merged; opt-in live test-domain validation remains pending.
+Status: complete, merged, and live-validated against an approved non-production domain.
 
 Deliverables:
 
@@ -85,6 +85,9 @@ Live acceptance tests, opt-in only:
 - run one small aggregate query;
 - retrieve one synthetic test trace and span;
 - verify the deployment identity cannot mutate APM.
+
+The anonymized results are recorded in `M2_LIVE_ACCEPTANCE.md`. Server-layer mutation denial
+passed; operators must continue to verify the deployed dynamic-group policy in OCI IAM.
 
 ## M3 — deterministic investigations
 
