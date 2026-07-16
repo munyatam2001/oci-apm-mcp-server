@@ -91,6 +91,8 @@ passed; operators must continue to verify the deployed dynamic-group policy in O
 
 ## M3 — deterministic investigations
 
+Status: implemented in version 0.3.0; opt-in live validation remains pending.
+
 Deliverables:
 
 - latency investigation;
@@ -105,6 +107,14 @@ Exit criteria:
 - conclusions link to trace/span evidence;
 - partial failures remain usable and explicit;
 - low-volume and zero-denominator comparisons are handled honestly.
+
+Implementation budgets:
+
+- latency: at most two OCI calls, up to 10 trace summaries, and up to 50 spans from one
+  representative trace;
+- errors: at most two OCI calls, a 50-trace search sample, up to 10 error-bearing summaries,
+  and up to 50 spans from one representative trace;
+- comparison: exactly two OCI calls and up to 50 newest trace summaries per window.
 
 ## M4 — synthetic read path
 

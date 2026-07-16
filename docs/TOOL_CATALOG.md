@@ -2,7 +2,7 @@
 
 ## 1. Catalogue rules
 
-This document is the public contract. M1 and M2 tools are implemented; later milestone sections remain planned.
+This document is the public contract. M1 through M3 tools are implemented; later milestone sections remain planned.
 
 Each tool will return the common response envelope defined in `ARCHITECTURE.md`. Tool-specific content is placed in `data`. Every result includes explicit scope, timing, warnings, pagination, and partial-result metadata when applicable.
 
@@ -35,7 +35,7 @@ Classification: read-only, idempotent, no OCI call required.
 
 ### M2 trace read path
 
-Status: implemented in version 0.2.0. Live calls remain opt-in and must use a non-production test domain first.
+Status: implemented and live-validated in a non-production domain.
 
 #### `list_apm_domains`
 
@@ -150,13 +150,20 @@ Classification: read-only, idempotent, potentially large.
 
 ### M3 investigation workflows
 
+Status: implemented in version 0.3.0. Live calls remain opt-in and must use a non-production
+test domain first.
+
 #### `investigate_latency`
 
 Purpose: bounded first-pass analysis of slow services or operations.
 
-Inputs: `apm_domain_id`, time window, optional service/operation, percentile or minimum duration, and `top_n` capped at 10.
+Inputs: `apm_domain_id`, optional time window (default one hour), optional service/operation,
+optional minimum duration, and `top_n` defaulting to 5 and capped at 10.
 
-Internal steps may compare service/operation latency, find representative slow traces, identify dominant spans, and propose evidence-based next steps. The workflow has a fixed OCI-call budget and reports partial substeps.
+The workflow makes one duration-descending trace search and, when a trace is found, retrieves
+at most 50 spans from the slowest representative trace. It makes at most two OCI calls. It
+returns up to `top_n` slow summaries and up to `top_n` longest representative spans. A failed
+detail read preserves the search evidence as `partial`. Timing evidence never claims root cause.
 
 Classification: read-only, idempotent, multi-call.
 
@@ -164,9 +171,14 @@ Classification: read-only, idempotent, multi-call.
 
 Purpose: bounded first-pass analysis of error traces.
 
-Inputs: `apm_domain_id`, time window, optional service/operation/error type, and `top_n` capped at 10.
+Inputs: `apm_domain_id`, optional time window (default one hour), optional
+service/operation/error type, and `top_n` defaulting to 5 and capped at 10.
 
-Returns error groups, affected services/operations, representative trace IDs, timing, and next steps. It does not claim root cause without supporting span evidence.
+The workflow searches at most 50 traces sorted by error count, selects up to `top_n` traces
+whose span-error count is positive, and retrieves at most 50 spans from one representative
+trace. It makes at most two OCI calls. Overall trace status is not treated as proof that no
+span failed. A failed detail read preserves summary evidence as `partial`, and error correlation
+does not claim root cause.
 
 Classification: read-only, idempotent, multi-call.
 
@@ -174,9 +186,14 @@ Classification: read-only, idempotent, multi-call.
 
 Purpose: compare the same deterministic trace aggregation across a current and baseline window.
 
-Inputs: filters plus two explicit, equal or clearly documented windows.
+Inputs: optional domain/service/operation filters, two explicit windows of at most 24 hours,
+and `sample_limit` defaulting to and capped at 50 per window.
 
-Returns counts, latency/error deltas, denominator warnings, and confidence limitations. Division-by-zero and low-volume cases must be explicit.
+The workflow makes exactly two OCI calls and compares bounded newest-trace samples. It returns
+sample size, observed average and p95 duration, error-trace rate, error-span count, and deltas.
+The response warns that these are not population aggregates, flags unequal windows and samples
+below 10, and leaves percentage deltas unavailable when the baseline is zero. One failed window
+returns the other as `partial`.
 
 Classification: read-only, idempotent, multi-call.
 

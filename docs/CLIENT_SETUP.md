@@ -1,6 +1,7 @@
 # MCP client setup
 
-> The Milestone 2 executable exposes ten read-only context, domain, query, trace, span, and summarized-snapshot tools.
+> The Milestone 3 executable exposes thirteen read-only context, domain, query, trace, span,
+> summarized-snapshot, and deterministic investigation tools.
 
 ## 1. Local STDIO
 
@@ -88,7 +89,7 @@ Supported startup variables:
 ## 6. Client verification
 
 1. Start the MCP server.
-2. Confirm the client lists the ten tools documented in `TOOL_CATALOG.md` through M2 only.
+2. Confirm the client lists the thirteen tools documented in `TOOL_CATALOG.md` through M3.
 3. Call `get_current_context` and verify masked scope and read-only status.
 4. Call `test_connection` against a test compartment/domain.
 5. Run `find_traces` over a narrow test window, then retrieve one synthetic test trace/span.

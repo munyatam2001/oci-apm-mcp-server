@@ -44,18 +44,25 @@ All trace content is confidential by default. The server must minimize, filter, 
 
 ## 5. Query guardrails
 
-Enforced Milestone 2 defaults:
+Enforced Milestone 3 defaults:
 
 | Query class | Default window | Maximum window | Default rows | Maximum rows |
 |---|---:|---:|---:|---:|
 | Raw trace rows | 1 hour | 24 hours | 50 | 200 |
 | Aggregated trace query | 1 hour | 7 days | 50 | 500 |
-| Investigation workflow | 1 hour | 24 hours | bounded internally | no raw expansion beyond 200 |
+| Latency investigation | 1 hour | 24 hours | 5 traces | 10 traces plus 50 spans from one trace |
+| Error investigation | 1 hour | 24 hours | 50-trace search | 10 error traces plus 50 spans from one trace |
+| Window comparison | explicit | 24 hours each | 50 per window | 50 per window |
 | Synthetic monitor listing | n/a | n/a | 50 | 200 |
 
 Broadening past a maximum must produce a structured validation response; the server must not silently clamp a user request without warning.
 
 The expert query tool is disabled by default. When enabled, it rejects excessive query length, missing time bounds, unsupported sources, explicit `BETWEEN` clauses, sensitive fields, row-limit mismatches, and mutating syntax.
+
+Latency and error workflows make at most two OCI calls. Window comparison makes exactly two.
+Comparison metrics are explicitly labeled as bounded newest-trace samples, not population
+aggregates. A failed drill-down cannot trigger retries or hidden expansion; available summary
+evidence is returned as `partial`.
 
 ## 6. Redaction policy
 

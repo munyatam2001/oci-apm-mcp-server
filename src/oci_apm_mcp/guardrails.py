@@ -43,6 +43,15 @@ TOOL_POLICIES: dict[str, ToolPolicy] = {
     "get_trace_snapshot": ToolPolicy(
         read_only=True, idempotent=True, destructive=False, open_world=True
     ),
+    "investigate_latency": ToolPolicy(
+        read_only=True, idempotent=True, destructive=False, open_world=True
+    ),
+    "investigate_errors": ToolPolicy(
+        read_only=True, idempotent=True, destructive=False, open_world=True
+    ),
+    "compare_trace_windows": ToolPolicy(
+        read_only=True, idempotent=True, destructive=False, open_world=True
+    ),
 }
 
 
@@ -50,6 +59,9 @@ DEFAULT_ROWS = 50
 MAX_RAW_ROWS = 200
 MAX_AGGREGATE_ROWS = 500
 MAX_TRACE_SPANS = 500
+MAX_INVESTIGATION_RESULTS = 10
+MAX_INVESTIGATION_SAMPLE = 50
+MAX_INVESTIGATION_SPANS = 50
 MAX_QUERY_LENGTH = 4_000
 MAX_RAW_WINDOW = timedelta(hours=24)
 MAX_AGGREGATE_WINDOW = timedelta(days=7)
