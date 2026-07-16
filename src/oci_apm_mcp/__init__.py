@@ -4,4 +4,4 @@ from .config import Settings
 from .foundation import FoundationService
 
 __all__ = ["FoundationService", "Settings"]
-__version__ = "0.2.0"
+__version__ = "0.2.1"

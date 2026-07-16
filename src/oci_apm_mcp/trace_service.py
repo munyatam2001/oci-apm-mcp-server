@@ -429,6 +429,7 @@ class TraceService:
             "duration_ms": getattr(span, "duration_in_ms", None),
             "is_error": getattr(span, "is_error", None),
             "source_name": safe_scalar(getattr(span, "source_name", None)),
+            "logs_returned": False,
             "logs_omitted": bool(getattr(span, "logs", None)),
         }
         if include_attributes:

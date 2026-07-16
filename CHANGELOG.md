@@ -29,6 +29,12 @@ All notable changes to this project will be documented here.
 - Dependabot configuration for Python packages and GitHub Actions.
 - Reviewed public repository release with protected `main`, secret scanning, push protection,
   dependency security updates, and private vulnerability reporting.
+- Anonymized M2 live-acceptance evidence for the SSH and instance-principal deployment path.
+
+### Changed
+
+- Normalized spans now state `logs_returned=false` explicitly; `logs_omitted` only indicates
+  whether source log entries existed and were removed.
 
 ### Not yet implemented
 
