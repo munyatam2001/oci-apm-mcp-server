@@ -23,13 +23,17 @@ All notable changes to this project will be documented here.
 - Normalized `get_trace` and `get_span` tools with bounded, redacted optional attributes.
 - Summarized `get_trace_snapshot` output without raw stack frames or thread details.
 - Pagination, normalized UTC windows, no-data responses, and Oracle request IDs.
-- Eighty-six offline tests with more than 95% package coverage.
+- Ninety-six offline tests with more than 93% package coverage.
 - Apache License 2.0 and public contribution/security-reporting guidance.
 - Oracle Linux VM deployment guidance for instance-principal authentication and SSH STDIO.
 - Dependabot configuration for Python packages and GitHub Actions.
 - Reviewed public repository release with protected `main`, secret scanning, push protection,
   dependency security updates, and private vulnerability reporting.
 - Anonymized M2 live-acceptance evidence for the SSH and instance-principal deployment path.
+- Deterministic `investigate_latency` and `investigate_errors` workflows with a fixed two-call
+  budget, representative trace evidence, and partial-result reporting.
+- Deterministic `compare_trace_windows` workflow with two bounded newest-trace samples,
+  explicit sample limitations, low-volume warnings, and zero-denominator handling.
 
 ### Changed
 
@@ -38,5 +42,5 @@ All notable changes to this project will be documented here.
 
 ### Not yet implemented
 
-- Synthetic-monitor operations and deterministic multi-call investigations.
+- Synthetic-monitor operations.
 - Any OCI mutation.

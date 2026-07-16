@@ -13,15 +13,17 @@ from .config import Settings
 from .domain_service import DomainService
 from .foundation import FoundationService
 from .guardrails import TOOL_POLICIES, validate_tool_registry
+from .investigation_service import InvestigationService
 from .trace_service import TraceService
 
 
 INSTRUCTIONS = (
     "Use this server for safe, read-only OCI Application Performance Monitoring access. "
     "First inspect current context and verify scope. Prefer find_traces with narrow filters, "
-    "then retrieve only the needed trace, span, or summarized snapshot. Expert queries are "
-    "disabled by default and sensitive trace fields are excluded. This server cannot create, "
-    "update, or delete OCI resources."
+    "then retrieve only the needed trace, span, or summarized snapshot. Use deterministic "
+    "investigation tools for bounded first-pass latency, error, and window comparisons. "
+    "Expert queries are disabled by default and sensitive trace fields are excluded. This "
+    "server cannot create, update, or delete OCI resources."
 )
 
 
@@ -41,12 +43,16 @@ def create_mcp_server(
     service: FoundationService | None = None,
     domain_service: DomainService | None = None,
     trace_service: TraceService | None = None,
+    investigation_service: InvestigationService | None = None,
 ) -> FastMCP:
-    """Create a server with exactly the read-only tools approved through Milestone 2."""
+    """Create a server with exactly the read-only tools approved through Milestone 3."""
     effective_settings = settings or Settings.from_env()
     effective_service = service or FoundationService(effective_settings)
     effective_domain_service = domain_service or DomainService(effective_settings)
     effective_trace_service = trace_service or TraceService(effective_settings)
+    effective_investigation_service = investigation_service or InvestigationService(
+        effective_settings, effective_trace_service
+    )
     mcp = FastMCP("OCI APM MCP", instructions=INSTRUCTIONS)
 
     @mcp.tool(annotations=_annotations("get_current_context"), structured_output=True)
@@ -203,6 +209,71 @@ def create_mcp_server(
             snapshot_time=snapshot_time or None,
         )
 
+    @mcp.tool(annotations=_annotations("investigate_latency"), structured_output=True)
+    def investigate_latency(
+        apm_domain_id: str = "",
+        start_time: str = "",
+        end_time: str = "",
+        service_name: str = "",
+        operation_name: str = "",
+        minimum_duration_ms: int = -1,
+        top_n: int = 5,
+    ) -> dict[str, Any]:
+        """Find slow traces and inspect one representative trace; maximum two OCI calls."""
+        return effective_investigation_service.investigate_latency(
+            apm_domain_id=apm_domain_id or None,
+            start_time=start_time or None,
+            end_time=end_time or None,
+            service_name=service_name or None,
+            operation_name=operation_name or None,
+            minimum_duration_ms=(minimum_duration_ms if minimum_duration_ms >= 0 else None),
+            top_n=top_n,
+        )
+
+    @mcp.tool(annotations=_annotations("investigate_errors"), structured_output=True)
+    def investigate_errors(
+        apm_domain_id: str = "",
+        start_time: str = "",
+        end_time: str = "",
+        service_name: str = "",
+        operation_name: str = "",
+        error_type: str = "",
+        top_n: int = 5,
+    ) -> dict[str, Any]:
+        """Find error-bearing traces and inspect one representative trace; maximum two OCI calls."""
+        return effective_investigation_service.investigate_errors(
+            apm_domain_id=apm_domain_id or None,
+            start_time=start_time or None,
+            end_time=end_time or None,
+            service_name=service_name or None,
+            operation_name=operation_name or None,
+            error_type=error_type or None,
+            top_n=top_n,
+        )
+
+    @mcp.tool(annotations=_annotations("compare_trace_windows"), structured_output=True)
+    def compare_trace_windows(
+        current_start_time: str,
+        current_end_time: str,
+        baseline_start_time: str,
+        baseline_end_time: str,
+        apm_domain_id: str = "",
+        service_name: str = "",
+        operation_name: str = "",
+        sample_limit: int = 50,
+    ) -> dict[str, Any]:
+        """Compare two bounded newest-trace samples; exactly two OCI calls, maximum 50 rows each."""
+        return effective_investigation_service.compare_trace_windows(
+            current_start_time=current_start_time,
+            current_end_time=current_end_time,
+            baseline_start_time=baseline_start_time,
+            baseline_end_time=baseline_end_time,
+            apm_domain_id=apm_domain_id or None,
+            service_name=service_name or None,
+            operation_name=operation_name or None,
+            sample_limit=sample_limit,
+        )
+
     validate_tool_registry(
         {
             "get_current_context",
@@ -215,6 +286,9 @@ def create_mcp_server(
             "get_trace",
             "get_span",
             "get_trace_snapshot",
+            "investigate_latency",
+            "investigate_errors",
+            "compare_trace_windows",
         }
     )
     return mcp
