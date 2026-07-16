@@ -14,6 +14,7 @@ from .domain_service import DomainService
 from .foundation import FoundationService
 from .guardrails import TOOL_POLICIES, validate_tool_registry
 from .investigation_service import InvestigationService
+from .synthetic_service import SyntheticService
 from .trace_service import TraceService
 
 
@@ -22,8 +23,9 @@ INSTRUCTIONS = (
     "First inspect current context and verify scope. Prefer find_traces with narrow filters, "
     "then retrieve only the needed trace, span, or summarized snapshot. Use deterministic "
     "investigation tools for bounded first-pass latency, error, and window comparisons. "
-    "Expert queries are disabled by default and sensitive trace fields are excluded. This "
-    "server cannot create, update, or delete OCI resources."
+    "Synthetic tools expose allowlisted monitor and public-vantage-point metadata only. Expert "
+    "queries are disabled by default and sensitive fields are excluded. This server cannot "
+    "create, update, or delete OCI resources."
 )
 
 
@@ -44,8 +46,9 @@ def create_mcp_server(
     domain_service: DomainService | None = None,
     trace_service: TraceService | None = None,
     investigation_service: InvestigationService | None = None,
+    synthetic_service: SyntheticService | None = None,
 ) -> FastMCP:
-    """Create a server with exactly the read-only tools approved through Milestone 3."""
+    """Create a server with exactly the read-only tools approved through the first M4 slice."""
     effective_settings = settings or Settings.from_env()
     effective_service = service or FoundationService(effective_settings)
     effective_domain_service = domain_service or DomainService(effective_settings)
@@ -53,6 +56,7 @@ def create_mcp_server(
     effective_investigation_service = investigation_service or InvestigationService(
         effective_settings, effective_trace_service
     )
+    effective_synthetic_service = synthetic_service or SyntheticService(effective_settings)
     mcp = FastMCP("OCI APM MCP", instructions=INSTRUCTIONS)
 
     @mcp.tool(annotations=_annotations("get_current_context"), structured_output=True)
@@ -274,6 +278,58 @@ def create_mcp_server(
             sample_limit=sample_limit,
         )
 
+    @mcp.tool(annotations=_annotations("list_synthetic_monitors"), structured_output=True)
+    def list_synthetic_monitors(
+        apm_domain_id: str = "",
+        display_name: str = "",
+        monitor_type: str = "",
+        status: str = "",
+        sort_by: str = "displayName",
+        sort_order: str = "ASC",
+        limit: int = 50,
+        page: str = "",
+    ) -> dict[str, Any]:
+        """Read one monitor page; default 50, maximum 200; targets and configurations excluded."""
+        return effective_synthetic_service.list_synthetic_monitors(
+            apm_domain_id=apm_domain_id or None,
+            display_name=display_name or None,
+            monitor_type=monitor_type or None,
+            status=status or None,
+            sort_by=sort_by,
+            sort_order=sort_order,
+            limit=limit,
+            page=page or None,
+        )
+
+    @mcp.tool(annotations=_annotations("get_synthetic_monitor"), structured_output=True)
+    def get_synthetic_monitor(monitor_id: str, apm_domain_id: str = "") -> dict[str, Any]:
+        """Read one monitor; target, auth/configuration, parameters, tags, and identities excluded."""
+        return effective_synthetic_service.get_synthetic_monitor(
+            monitor_id=monitor_id,
+            apm_domain_id=apm_domain_id or None,
+        )
+
+    @mcp.tool(annotations=_annotations("list_public_vantage_points"), structured_output=True)
+    def list_public_vantage_points(
+        apm_domain_id: str = "",
+        display_name: str = "",
+        name: str = "",
+        sort_by: str = "displayName",
+        sort_order: str = "ASC",
+        limit: int = 50,
+        page: str = "",
+    ) -> dict[str, Any]:
+        """Read one public vantage-point page; default 50, maximum 200; coordinates excluded."""
+        return effective_synthetic_service.list_public_vantage_points(
+            apm_domain_id=apm_domain_id or None,
+            display_name=display_name or None,
+            name=name or None,
+            sort_by=sort_by,
+            sort_order=sort_order,
+            limit=limit,
+            page=page or None,
+        )
+
     validate_tool_registry(
         {
             "get_current_context",
@@ -289,6 +345,9 @@ def create_mcp_server(
             "investigate_latency",
             "investigate_errors",
             "compare_trace_windows",
+            "list_synthetic_monitors",
+            "get_synthetic_monitor",
+            "list_public_vantage_points",
         }
     )
     return mcp

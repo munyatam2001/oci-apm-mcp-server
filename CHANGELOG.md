@@ -23,7 +23,7 @@ All notable changes to this project will be documented here.
 - Normalized `get_trace` and `get_span` tools with bounded, redacted optional attributes.
 - Summarized `get_trace_snapshot` output without raw stack frames or thread details.
 - Pagination, normalized UTC windows, no-data responses, and Oracle request IDs.
-- Ninety-six offline tests with more than 93% package coverage.
+- One hundred seven offline tests with more than 93% package coverage.
 - Apache License 2.0 and public contribution/security-reporting guidance.
 - Oracle Linux VM deployment guidance for instance-principal authentication and SSH STDIO.
 - Dependabot configuration for Python packages and GitHub Actions.
@@ -36,13 +36,19 @@ All notable changes to this project will be documented here.
   explicit sample limitations, low-volume warnings, and zero-denominator handling.
 - Anonymized M3 live-acceptance evidence for bounded latency, error, and window-comparison
   workflows over the SSH and instance-principal deployment path.
+- Bounded `list_synthetic_monitors`, `get_synthetic_monitor`, and
+  `list_public_vantage_points` tools with strict output allowlists.
+- Explicit synthetic-monitor exclusions for targets, request configuration, authentication,
+  script parameters, tags, creator identities, worker lists, and exact coordinates.
 
 ### Changed
 
 - Normalized spans now state `logs_returned=false` explicitly; `logs_omitted` only indicates
   whether source log entries existed and were removed.
+- Runtime context now reads the package version from one shared source instead of reporting a
+  stale hard-coded foundation version.
 
 ### Not yet implemented
 
-- Synthetic-monitor operations.
+- Synthetic execution-result retrieval and health aggregation.
 - Any OCI mutation.

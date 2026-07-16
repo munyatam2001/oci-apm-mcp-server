@@ -65,3 +65,12 @@ def test_client_factory_constructs_narrow_trace_clients(
 
     assert query_client.kwargs["timeout"] == (10.0, 60.0)
     assert trace_client.kwargs["timeout"] == (10.0, 60.0)
+
+
+def test_client_factory_constructs_synthetic_client(monkeypatch: pytest.MonkeyPatch) -> None:
+    module = SimpleNamespace(apm_synthetics=SimpleNamespace(ApmSyntheticClient=RecordingClient))
+    monkeypatch.setattr(client_factory, "import_module", lambda _name: module)
+
+    client = OciClientFactory(Settings(), FakeAuthProvider(None)).synthetic_client()
+
+    assert client.kwargs["timeout"] == (10.0, 60.0)

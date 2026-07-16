@@ -2,9 +2,10 @@
 
 A Model Context Protocol (MCP) server for safe, structured access to Oracle Cloud Infrastructure Application Performance Monitoring (OCI APM).
 
-> Status: Milestone 3 deterministic investigations. Thirteen read-only tools cover context,
+> Status: Milestone 4 synthetic discovery. Sixteen read-only tools cover context,
 > APM-domain discovery, bounded trace queries, trace/span drill-down, summarized snapshots,
-> and bounded latency, error, and window-comparison workflows. OCI mutations are not implemented.
+> bounded investigations, and safe synthetic-monitor/vantage-point discovery. OCI mutations
+> and synthetic result artifacts are not implemented.
 
 > This is an independent open-source project. It is not affiliated with, endorsed by, or
 > supported by Oracle Corporation. Oracle, OCI, and related marks are trademarks of Oracle
@@ -75,6 +76,9 @@ The server uses STDIO, so stdout is reserved for MCP protocol messages. Applicat
 | `investigate_latency` | At most two | Find up to 10 slow traces and inspect one representative trace |
 | `investigate_errors` | At most two | Search 50 traces, return up to 10 error-bearing traces, and inspect one representative trace |
 | `compare_trace_windows` | Exactly two | Compare bounded newest-trace samples of at most 50 rows per window |
+| `list_synthetic_monitors` | One | List up to 200 monitor summaries without targets or configuration |
+| `get_synthetic_monitor` | One | Get one allowlisted monitor without auth, parameters, tags, or identities |
+| `list_public_vantage_points` | One | List up to 200 public vantage points without exact coordinates |
 
 Every tool is marked read-only, idempotent, and non-destructive in MCP metadata. Expert queries default to disabled (`OCI_APM_ENABLE_EXPERT_QUERY=false`). SQL text, stack traces, logs, request/response bodies, headers, cookies, URLs, user/session identifiers, and secrets are excluded or redacted.
 
@@ -117,7 +121,7 @@ The default test suite uses fakes and requires no OCI credentials or network con
 │   ├── REFERENCE_REVIEW.md
 │   ├── SECURITY.md
 │   └── TOOL_CATALOG.md
-├── src/oci_apm_mcp/       # read-only domain, trace, and investigation services
+├── src/oci_apm_mcp/       # read-only domain, trace, investigation, and synthetic services
 ├── tests/                 # offline unit and contract tests
 ├── AGENTS.md
 ├── CHANGELOG.md
@@ -131,7 +135,8 @@ The default test suite uses fakes and requires no OCI credentials or network con
 - **M1 — server foundation:** configuration, authentication, client factory, health check, error envelope, and offline tests. Complete.
 - **M2 — trace read path:** APM-domain discovery, bounded trace queries, trace/span details, and summarized snapshots. Complete and live-validated in a non-production domain.
 - **M3 — investigations:** slow transactions, error transactions, time-window comparison, and next-step suggestions. Complete and live-validated in a non-production domain.
-- **M4 — synthetic read path:** monitor discovery, monitor details, results, and health summary.
+- **M4 — synthetic read path:** safe monitor discovery/details and public vantage points are
+  implemented. Artifact results and health aggregation remain deferred behind separate designs.
 - **M5 — production hardening:** audit events, redaction validation, packaging, deployment, and live OCI acceptance tests.
 - **M6 — optional writes:** separately reviewed synthetic-monitor and script mutations.
 

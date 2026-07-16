@@ -120,12 +120,20 @@ The anonymized validation results are recorded in `M3_LIVE_ACCEPTANCE.md`.
 
 ## M4 — synthetic read path
 
+Status: monitor list/get and public vantage-point discovery are implemented in version 0.4.0;
+opt-in live validation remains pending.
+
 Deliverables:
 
 - monitor list/get;
 - public vantage-point list;
 - bounded monitor execution result summaries;
 - synthetic health summary after separate metric-path design.
+
+The first M4 slice intentionally excludes `get_synthetic_monitor_result`. Oracle's endpoint
+returns HAR, screenshots, console logs, network data, diagnostics, or script content directly;
+fetching these artifacts merely to discard their contents would still expand the server's
+sensitive-data and payload boundary. Result metadata requires a separately reviewed design.
 
 Security gates:
 

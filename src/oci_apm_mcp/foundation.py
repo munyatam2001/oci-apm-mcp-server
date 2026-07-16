@@ -11,6 +11,7 @@ from .config import Settings, mask_identifier
 from .errors import normalize_error
 from .guardrails import TOOL_POLICIES
 from .models import Scope, ToolResponse
+from .version import __version__
 
 
 def _response_request_id(response: Any, fallback: str) -> str:
@@ -54,7 +55,7 @@ class FoundationService:
             status="success",
             scope=self._scope(),
             data={
-                "server_version": "0.2.0",
+                "server_version": __version__,
                 "configuration": context,
                 "registered_capabilities": sorted(TOOL_POLICIES),
             },
@@ -176,7 +177,7 @@ class FoundationService:
                 request_id=_response_request_id(response, client_request_id),
                 scope=scope,
                 data=data,
-                next_steps=["The server foundation is ready for the trace read-path milestone."],
+                next_steps=["Call a bounded trace, investigation, or synthetic discovery tool."],
                 timing_ms=_elapsed_ms(started),
             ).as_dict()
         except Exception as error:

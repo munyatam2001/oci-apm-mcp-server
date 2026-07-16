@@ -50,7 +50,7 @@ APM agents and synthetic monitoring publish selected metrics into OCI Monitoring
 Allow group <group-name> to read metrics in compartment <compartment-name>
 ```
 
-This is not required for the initial Trace Explorer and synthetic configuration/result tools.
+This is not required for the Trace Explorer, synthetic monitor, or public-vantage-point tools.
 
 ## 5. Future synthetic writes
 

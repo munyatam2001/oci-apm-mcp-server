@@ -54,6 +54,7 @@ Enforced Milestone 3 defaults:
 | Error investigation | 1 hour | 24 hours | 50-trace search | 10 error traces plus 50 spans from one trace |
 | Window comparison | explicit | 24 hours each | 50 per window | 50 per window |
 | Synthetic monitor listing | n/a | n/a | 50 | 200 |
+| Public vantage-point listing | n/a | n/a | 50 | 200 |
 
 Broadening past a maximum must produce a structured validation response; the server must not silently clamp a user request without warning.
 
@@ -82,6 +83,13 @@ Default-denied names should include, case-insensitively:
 - synthetic script parameters marked secret.
 
 SQL text, stack traces, logs, request bodies, response bodies, headers, URLs, user/session identifiers, and similar sensitive fields are excluded. Custom span attributes require explicit per-call opt-in, are capped at 50, and remain subject to redaction.
+
+Synthetic monitor outputs are allowlist-based. They exclude target URLs/hosts, monitor request
+configuration, authentication and client certificates, request headers/query/body, response
+verification content, script parameters, tags, creator identities, private worker lists, and
+exact vantage-point coordinates. The monitor-result endpoint is not registered because it
+returns raw HAR, screenshot, log, network, diagnostic, or script artifacts rather than a
+metadata-only representation.
 
 ## 7. Authentication
 

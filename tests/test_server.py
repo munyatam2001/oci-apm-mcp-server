@@ -29,7 +29,7 @@ def test_server_has_global_read_only_instructions() -> None:
     assert "cannot create" in server.instructions
 
 
-def test_server_registers_exactly_milestone_three_tools_with_read_only_annotations() -> None:
+def test_server_registers_exactly_first_milestone_four_tools_with_read_only_annotations() -> None:
     server = create_mcp_server(Settings(), StubService())  # type: ignore[arg-type]
 
     tools = server._tool_manager.list_tools()  # noqa: SLF001 - contract test for SDK registration
@@ -47,6 +47,9 @@ def test_server_registers_exactly_milestone_three_tools_with_read_only_annotatio
         "investigate_latency",
         "investigate_errors",
         "compare_trace_windows",
+        "list_synthetic_monitors",
+        "get_synthetic_monitor",
+        "list_public_vantage_points",
     }
     for tool in tools:
         assert tool.annotations is not None

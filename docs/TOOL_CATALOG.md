@@ -2,7 +2,8 @@
 
 ## 1. Catalogue rules
 
-This document is the public contract. M1 through M3 tools are implemented; later milestone sections remain planned.
+This document is the public contract. M1 through M3 and the safe M4 discovery slice are
+implemented; later milestone sections remain planned.
 
 Each tool will return the common response envelope defined in `ARCHITECTURE.md`. Tool-specific content is placed in `data`. Every result includes explicit scope, timing, warnings, pagination, and partial-result metadata when applicable.
 
@@ -199,13 +200,18 @@ Classification: read-only, idempotent, multi-call.
 
 ### M4 synthetic read path
 
+Status: the safe discovery slice is implemented in version 0.4.0. Execution artifacts and
+health aggregation remain deferred.
+
 #### `list_synthetic_monitors`
 
 Purpose: list synthetic monitors in an APM domain.
 
-Inputs: `apm_domain_id`, optional name/type/status filters, `limit`, and `page`.
+Inputs: `apm_domain_id`; optional display-name, type, and status filters; supported sort field
+and order; `limit` defaulting to 50 and capped at 200; and `page`.
 
-The result excludes embedded secrets and secret parameter values.
+The result excludes targets, configuration, script parameters, tags, creator identities, and
+private worker lists. Pagination and truncation are explicit.
 
 Classification: read-only, idempotent.
 
@@ -215,7 +221,9 @@ Purpose: retrieve safe configuration and status for one monitor.
 
 Inputs: `apm_domain_id`, `monitor_id`.
 
-Authentication values, client private keys, wallets, and secret script parameters are excluded.
+Targets, request/authentication configuration, client certificates, headers, query parameters,
+request bodies, verification content, script parameters, tags, creator identities, and private
+worker lists are excluded through a fixed output allowlist.
 
 Classification: read-only, idempotent, sensitive-configuration capable.
 
@@ -225,7 +233,9 @@ Purpose: retrieve normalized output for one monitor execution.
 
 Inputs: `apm_domain_id`, `monitor_id`, `execution_time`, `vantage_point`, and requested result type when required by Oracle's API.
 
-Screenshots, HAR files, console logs, network details, and script content are not returned in the first implementation. Initially return execution metadata and bounded diagnostic summaries only.
+Deferred. Oracle's API directly returns HAR, screenshots, console logs, network details,
+diagnostics, or script content. A future metadata-only implementation must be separately
+designed and reviewed; these artifacts are not fetched by version 0.4.0.
 
 Classification: read-only, idempotent, sensitive-data capable.
 
@@ -233,7 +243,10 @@ Classification: read-only, idempotent, sensitive-data capable.
 
 Purpose: list public APM vantage points available to the domain.
 
-Inputs: `apm_domain_id`, optional capability filters, `limit`, and `page`.
+Inputs: `apm_domain_id`; optional display-name and name filters; sort field/order; `limit`
+defaulting to 50 and capped at 200; and `page`.
+
+Returns public name, display name, city, and country. Exact latitude and longitude are excluded.
 
 Classification: read-only, idempotent.
 
