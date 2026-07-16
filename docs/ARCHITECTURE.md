@@ -29,7 +29,7 @@ The implementation should mirror Oracle's service boundaries rather than creatin
 | APM domains | `oci.apm_control_plane.ApmDomainClient` | List and get domains only |
 | Trace queries | `oci.apm_traces.QueryClient` | Quick picks and bounded queries |
 | Trace details | `oci.apm_traces.TraceClient` | Trace, span, and snapshot details |
-| Synthetics | `oci.apm_synthetics.ApmSyntheticClient` | Monitor, result, and vantage-point reads |
+| Synthetics | `oci.apm_synthetics.ApmSyntheticClient` | Allowlisted monitor and public-vantage-point reads |
 | Identity | `oci.identity.IdentityClient` | Optional compartment discovery |
 
 Client construction belongs in one injectable factory. Services receive narrow client protocols so tests never require the OCI SDK network path.
@@ -50,7 +50,7 @@ Client construction belongs in one injectable factory. Services receive narrow c
 | `domain_service.py` | APM-domain and optional compartment discovery |
 | `trace_query_builder.py` | Deterministic APM query construction |
 | `trace_service.py` | Query execution and trace/span normalization |
-| `synthetic_service.py` | Synthetic monitor and result reads |
+| `synthetic_service.py` | Allowlisted synthetic monitor and public-vantage-point reads |
 | `investigation_service.py` | Bounded multi-step diagnostic workflows |
 | `audit.py` | Metadata-only audit events; no raw sensitive payloads |
 

@@ -52,6 +52,15 @@ TOOL_POLICIES: dict[str, ToolPolicy] = {
     "compare_trace_windows": ToolPolicy(
         read_only=True, idempotent=True, destructive=False, open_world=True
     ),
+    "list_synthetic_monitors": ToolPolicy(
+        read_only=True, idempotent=True, destructive=False, open_world=True
+    ),
+    "get_synthetic_monitor": ToolPolicy(
+        read_only=True, idempotent=True, destructive=False, open_world=True
+    ),
+    "list_public_vantage_points": ToolPolicy(
+        read_only=True, idempotent=True, destructive=False, open_world=True
+    ),
 }
 
 

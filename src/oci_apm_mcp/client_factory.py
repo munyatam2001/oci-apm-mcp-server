@@ -29,6 +29,14 @@ class TraceClientFactory(ApmDomainClientFactory, Protocol):
         ...
 
 
+class SyntheticClientFactory(ApmDomainClientFactory, Protocol):
+    """Factory protocol consumed by the bounded synthetic read service."""
+
+    def synthetic_client(self) -> Any:
+        """Return a client supporting safe synthetic monitor reads."""
+        ...
+
+
 class OciClientFactory:
     """Create OCI clients only when a tool actually requires an OCI call."""
 
@@ -61,3 +69,7 @@ class OciClientFactory:
     def trace_client(self) -> Any:
         oci = import_module("oci")
         return oci.apm_traces.TraceClient(**self._client_kwargs())
+
+    def synthetic_client(self) -> Any:
+        oci = import_module("oci")
+        return oci.apm_synthetics.ApmSyntheticClient(**self._client_kwargs())

@@ -71,6 +71,7 @@ def test_current_context_is_offline_and_masked() -> None:
     result = service.get_current_context()
 
     assert result["status"] == "success"
+    assert result["data"]["server_version"] == "0.4.0"
     assert result["scope"]["apm_domain_id"] == mask_identifier(domain_id)
     assert domain_id not in str(result)
     assert compartment_id not in str(result)

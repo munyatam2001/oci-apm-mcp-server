@@ -17,7 +17,7 @@ from oci_apm_mcp.guardrails import (
 
 
 def test_all_registered_tools_are_read_only_and_non_destructive() -> None:
-    assert len(TOOL_POLICIES) == 13
+    assert len(TOOL_POLICIES) == 16
     assert all(policy.read_only for policy in TOOL_POLICIES.values())
     assert all(policy.idempotent for policy in TOOL_POLICIES.values())
     assert not any(policy.destructive for policy in TOOL_POLICIES.values())
