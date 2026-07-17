@@ -31,6 +31,9 @@ Credentials and private-key contents must never be placed directly in MCP config
 
 An OCI VM deployment should use instance principals. A local MCP client may start the remote process through SSH:
 
+For the complete installation, IAM, verification, upgrade, and troubleshooting walkthrough,
+see [Install on Oracle Linux and connect Codex through SSH](VM_DEPLOYMENT.md).
+
 ```toml
 [mcp_servers.oci_apm]
 command = "ssh"
@@ -39,7 +42,7 @@ args = [
   "-o", "ServerAliveInterval=60",
   "-o", "ServerAliveCountMax=3",
   "opc@approved-hostname",
-  "cd /opt/oci-apm-mcp-server && . venv/bin/activate && exec oci-apm-mcp-server"
+  "cd /opt/oci-apm-mcp-server && . ./runtime/apm.env && exec ./venv/bin/oci-apm-mcp-server"
 ]
 startup_timeout_sec = 20
 tool_timeout_sec = 120
