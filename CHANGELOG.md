@@ -40,6 +40,8 @@ All notable changes to this project will be documented here.
   `list_public_vantage_points` tools with strict output allowlists.
 - Explicit synthetic-monitor exclusions for targets, request configuration, authentication,
   script parameters, tags, creator identities, worker lists, and exact coordinates.
+- Project copyright and maintainer attribution for MUNYATAM BHARDWAJ.
+- Acknowledgement of Rishabh Ghosh's `logan-mcp-server` as an inspiration and reference point.
 
 ### Changed
 
