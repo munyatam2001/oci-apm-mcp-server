@@ -142,8 +142,8 @@ The default test suite uses fakes and requires no OCI credentials or network con
 
 See [the development plan](docs/DEVELOPMENT_PLAN.md) for acceptance criteria.
 
-For an OCI Compute deployment using instance principals and an SSH-connected local Codex
-client, see [the Oracle Linux VM deployment guide](docs/VM_DEPLOYMENT.md).
+For an end-to-end OCI Compute deployment using instance principals and an SSH-connected local
+Codex client, see [Install on Oracle Linux and connect Codex through SSH](docs/VM_DEPLOYMENT.md).
 
 ## Author and maintainer
 

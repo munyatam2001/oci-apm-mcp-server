@@ -42,6 +42,8 @@ All notable changes to this project will be documented here.
   script parameters, tags, creator identities, worker lists, and exact coordinates.
 - Project copyright and maintainer attribution for MUNYATAM BHARDWAJ.
 - Acknowledgement of Rishabh Ghosh's `logan-mcp-server` as an inspiration and reference point.
+- End-to-end Oracle Linux installation, instance-principal IAM, SSH-to-Codex connection,
+  acceptance, upgrade, security, and troubleshooting guidance.
 
 ### Changed
 
