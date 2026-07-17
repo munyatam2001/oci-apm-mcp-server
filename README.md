@@ -145,6 +145,19 @@ See [the development plan](docs/DEVELOPMENT_PLAN.md) for acceptance criteria.
 For an OCI Compute deployment using instance principals and an SSH-connected local Codex
 client, see [the Oracle Linux VM deployment guide](docs/VM_DEPLOYMENT.md).
 
+## Author and maintainer
+
+OCI APM MCP Server was conceived, directed, and is maintained by
+**MUNYATAM BHARDWAJ** ([@munyatam2001](https://github.com/munyatam2001)). See
+[AUTHORS.md](AUTHORS.md) for project authorship and acknowledgements.
+
+## Acknowledgement
+
+This project draws inspiration from Rishabh Ghosh's
+[logan-mcp-server](https://github.com/rishabh-ghosh24/logan-mcp-server) for OCI Log Analytics.
+Its approach provided a useful reference point while establishing this project's standards and
+direction for OCI Application Performance Monitoring.
+
 ## Official references
 
 - [Oracle APM documentation](https://docs.oracle.com/en-us/iaas/application-performance-monitoring/)
@@ -156,4 +169,6 @@ client, see [the Oracle Linux VM deployment guide](docs/VM_DEPLOYMENT.md).
 
 ## Licensing
 
-Licensed under the [Apache License 2.0](LICENSE).
+Copyright 2026 MUNYATAM BHARDWAJ.
+
+Licensed under the [Apache License 2.0](LICENSE). See [NOTICE](NOTICE) for the copyright notice.
